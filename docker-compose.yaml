@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build: 
+      context: .
+    command: /bin/sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:2727"
+    volumes:
+      - ./app:/app
+    ports:
+      - "2727:2727"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=filesdb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=kappa
+    ports:
+      - "5432:5432"
+
+
+volumes:
+  postgres_data:
