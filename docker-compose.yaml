@@ -4,7 +4,7 @@ services:
   web:
     build: 
       context: .
-    command: /bin/sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:2727"
+    command: /bin/sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:2727"
     volumes:
       - ./app:/app
     ports:
@@ -13,6 +13,7 @@ services:
       - ./.env
     depends_on:
       - db
+      - redis
 
   db:
     image: postgres:13-alpine
@@ -25,6 +26,38 @@ services:
     ports:
       - "5432:5432"
 
+  redis:
+    image: redis:7.2.4-alpine
+    hostname: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./config/redis.conf:/redis.conf"
+    command: ["redis-server", "/redis.conf"]
+
+  celery-worker:
+    build: 
+      context: .
+    volumes:
+      - ./app:/app
+    command: celery -A celery_app.app worker --loglevel=info
+    links:
+      - redis
+    depends_on:
+      - redis
+
+  celery-flower:
+    build:
+      context: .
+    volumes:
+      - ./app:/app
+    command: celery -A celery_app.app flower
+    links:
+      - redis
+    depends_on:
+      - redis
+    ports:
+      - "5555:5555"
 
 volumes:
   postgres_data:
