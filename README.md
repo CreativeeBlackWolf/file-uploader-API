@@ -16,6 +16,7 @@ Returns all files from DB like:
         "file": http://localhost:2727/path/to/file/on/server,
         "uploaded_at": datetime,
         "processed": whether file was processed or not,
+        // data will be empty until file is processed
         "data": {
             "size": file size,
             "filename": file name,
