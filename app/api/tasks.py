@@ -19,7 +19,7 @@ def handle_file(file_id: int) -> bool:
     file.data = {
         "filename": filename,
         "extension": file_extension,
-        "size": f"{round(os.path.getsize(filepath) / (1024 ** 2), 2)}",
+        "size": f"{round(os.path.getsize(filepath) / (1024 ** 2), 2)} MB",
     }
 
     file.processed = True
