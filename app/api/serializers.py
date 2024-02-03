@@ -1,7 +1,7 @@
-from rest_framework import serializers
 from api.models import File
-from django.forms.models import model_to_dict
 from api.tasks import handle_file
+from django.forms.models import model_to_dict
+from rest_framework import serializers
 
 
 class FileUploadSerializer(serializers.ModelSerializer):

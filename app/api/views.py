@@ -1,22 +1,17 @@
-from django.shortcuts import render
-from django.db import transaction
-from django.http import JsonResponse, QueryDict
-from rest_framework import viewsets, status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.decorators import action
-from rest_framework.exceptions import APIException
 from api.models import File
 from api.serializers import FileSerializer, FileUploadSerializer
-from api.tasks import handle_file
-
-import celery
+from django.db import transaction
+from django.http import JsonResponse
+from rest_framework import status, viewsets
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class FileAPIViewSet(viewsets.ModelViewSet):
     queryset = File.objects.all()
     serializer_class = FileSerializer
+    http_method_names = ["get"]
 
 
 class UploadFileAPIView(APIView):
