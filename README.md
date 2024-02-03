@@ -32,4 +32,4 @@ Returns all files from DB like:
 Upload files with form-data body.
 
 - key: files
-- value: file_to_upload
+- value: file(s)_to_upload
