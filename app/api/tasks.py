@@ -15,7 +15,6 @@ from PIL import Image, ImageStat
     retry_kwargs={"max_retries": 10, "countdown": 0.5},
 )
 def handle_file(file_id: int) -> bool:
-    time.sleep(0.1)  # slow down to make sure that DB was updated
     file = File.objects.get(pk=file_id)
     filepath = str(file.file.path)
     filename, file_extension = os.path.splitext(filepath)

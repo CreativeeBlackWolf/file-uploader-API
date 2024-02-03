@@ -1,5 +1,4 @@
 from api.models import File
-from api.tasks import handle_file
 from django.forms.models import model_to_dict
 from rest_framework import serializers
 
@@ -14,14 +13,12 @@ class FileUploadSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         files = validated_data.get("files")
-        file_instances = [File(file=file) for file in files]
         saved_files = []
         for file in files:
             f = File.objects.create(file=file)
             dict_model = model_to_dict(f)
             dict_model["file"] = dict_model["file"].path
             saved_files.append(dict_model)
-            handle_file.delay(dict_model["id"])
 
         return {"files": [i for i in saved_files]}
 
