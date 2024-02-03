@@ -18,10 +18,10 @@ class FileUploadSerializer(serializers.ModelSerializer):
         saved_files = []
         for file in files:
             f = File.objects.create(file=file)
-            handle_file.delay(f.id)
             dict_model = model_to_dict(f)
             dict_model["file"] = dict_model["file"].path
             saved_files.append(dict_model)
+            handle_file.delay(dict_model["id"])
 
         return {"files": [i for i in saved_files]}
 
