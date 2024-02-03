@@ -9,4 +9,4 @@ class File(models.Model):
     data = models.JSONField(default=dict, blank=True)
 
     def __str__(self):
-        return f"{file}:{self.uploaded_at.date()}"
+        return f"{self.file}:{self.uploaded_at.date()}"
