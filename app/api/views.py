@@ -38,3 +38,12 @@ class UploadFileAPIView(APIView):
             return JsonResponse(
                 {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+
+def page_not_found_view(request, exception):
+    return JsonResponse(
+        {
+            "error": "You got 404'd. Proceed to /api/files/ if you want to see all uploaded files. Proceed to /api/upload/ to upload a file."
+        },
+        status=status.HTTP_404_NOT_FOUND,
+    )
