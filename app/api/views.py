@@ -2,16 +2,15 @@ from api.models import File
 from api.serializers import FileSerializer, FileUploadSerializer
 from django.db import transaction
 from django.http import JsonResponse
-from rest_framework import status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.parsers import FormParser, MultiPartParser
-from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 
-class FileAPIViewSet(viewsets.ModelViewSet):
+class FileAPIViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
     queryset = File.objects.all()
     serializer_class = FileSerializer
-    http_method_names = ["get"]
 
 
 class UploadFileAPIView(APIView):
@@ -22,14 +21,16 @@ class UploadFileAPIView(APIView):
         serializer = self.serializer_class(data=request.data)
         try:
             with transaction.atomic():
-                if serializer.is_valid(raise_exception=True):
+                if serializer.is_valid():
                     serializer.save()
                     return JsonResponse(
                         serializer.instance, status=status.HTTP_201_CREATED
                     )
                 else:
                     return JsonResponse(
-                        {"error": "file was not uploaded"},
+                        {
+                            "files": "This field is required or files we're not uploaded via form-body"
+                        },
                         status=status.HTTP_400_BAD_REQUEST,
                     )
         except Exception as e:
