@@ -13,7 +13,6 @@ class TestUploadingAPI(unittest.TestCase):
         files = {"files": open(FILES_DIR + "test.txt")}
         r = requests.post(BASE_URL + "/api/upload/", files=files)
 
-        print(r.json())
         on_upload_file_data = r.json()["files"][0]
         file_id = on_upload_file_data["id"]
 
