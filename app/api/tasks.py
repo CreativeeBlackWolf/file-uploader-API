@@ -44,6 +44,9 @@ def handle_file(file_id: int) -> bool:
                 "compression_type": get_compress_type_str(zf.compression),
                 "compression_level": zf.compresslevel,
             }
+    elif file_extension in [".txt"]:
+        # do some hard work!
+        ...
 
     file.processed = True
     file.save()
